@@ -1,0 +1,56 @@
+type: custom:button-card
+entity: switch.t5_3c_120_channel_1
+color: auto
+show_icon: false
+show_state: true
+name: Escritório
+custom_fields:
+  icon_lamp: >
+    [[[ const state = entity.state === 'on' ? 'animate' : null;  return `<svg
+    xmlns="http://www.w3.org/2000/svg" width="7em" height="7em" viewBox="0 0 24
+    24"><g fill="currentColor"><path fill-opacity="0" stroke="currentColor"
+    stroke-dasharray="46" stroke-dashoffset="46" stroke-linecap="round"
+    stroke-linejoin="round" stroke-width="2" path class="${state}" d="M12
+    17H9V14.1973C7.2066 13.1599 6 11.2208 6 9C6 5.68629 8.68629 3 12 3C15.3137 3
+    18 5.68629 18 9C18 11.2208 16.7934 13.1599 15 14.1973V17z"><animate
+    fill="freeze" attributeName="stroke-dashoffset" dur="0.4s"
+    values="46;0"/><animate fill="freeze" attributeName="fill-opacity"
+    begin="0.7s" dur="0.5s" values="0;1"/></path><rect width="6" height="0"
+    x="9" y="20" rx="1"><animate fill="freeze" attributeName="height"
+    begin="0.5s" dur="0.2s" values="0;2"/></rect></g></svg>`; ]]]
+styles:
+  card:
+    - height: 230px
+    - width: 270px
+    - font-size: 22px
+    - font-weight: bold
+    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+    - letter-spacing: var(--button-card-letter-spacing);
+    - border-radius: 15px
+  name:
+    - color: var(--button-card-light-color)
+    - justify-self: left
+    - line-height: 141%
+    - font-weight: bold
+    - align-self: end
+    - position: absolute
+    - bottom: 15%
+    - left: 5%
+  state:
+    - justify-self: start
+    - line-height: 120%
+    - font-size: 16px
+    - font-weight: normal
+    - align-self: end
+    - position: absolute
+    - bottom: 5%
+    - left: 5%
+  custom_fields:
+    icon_lamp:
+      - fill: >-
+          [[[ return entity.state === 'on' ?
+          'var(--button-card-light-color-no-temperature)' : '#9da0a2'; ]]]
+      - top: 8.5%
+      - left: 11%
+      - width: 200px
+      - position: absolute
