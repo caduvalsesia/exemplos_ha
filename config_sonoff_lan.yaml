@@ -1,0 +1,21 @@
+sonoff:
+  rfbridge:
+    ## configuração para sensor de movimento e tempo de timeout.
+    Movimento:  
+      device_class: motion
+      timeout: 30  # opcional (padrão 120), tempo limite em segundos para desligamento automático
+
+
+    ## configuração de sensor porta/janela que possui 2 estados (aberto e fechado)
+    Porta_aberta:  # nome do botão/alarme no aplicativo eWeLink (sinal aberto)
+      name: Porta teste  # nome do sensor
+      device_class: door  # ex: door, window
+      timeout: 0  # desativar o tempo limite de fechamento automático
+      payload_off: Porta_fechada  # nome do botão/alarme no aplicativo eWeLink (sinal fechado)
+
+
+    # configuração de sensor com 1 estado (estado simples)
+    Door Sensor 1:  # nome do botão/alarme no aplicativo eWeLink (sinal aberto)
+      name: Door Sensor  # nome do sensor
+      device_class: door  # ex: door, window
+      timeout: 5  # tempo usado para o sensor voltar para estado fechado em segundos
