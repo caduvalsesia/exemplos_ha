@@ -1,0 +1,195 @@
+- id: b8631014c5894b1493de41b0de9c8f16
+  alias: Disparar_alarme
+  description: ''
+  trigger:
+  - platform: event
+    event_type: telegram_command
+    event_data:
+      command: /disparar
+  action:
+  - service: notify.telegram
+    data:
+      message: Alarme disparado.
+      data:
+        inline_keyboard:
+        - Desligar Alarme:/desligaralarme
+  initial_state: true
+    
+- id: '1715053633076'
+  alias: alarme_armado_casa
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - alarm_control_panel.home_alarm
+    to: armed_home
+  condition: []
+  action:
+  - service: notify.telegram
+    metadata: {}
+    data:
+      message: O alarme está armado no modo Casa.
+  - service: notify.alexa_media
+    metadata: {}
+    data:
+      data:
+        type: tts
+      message: <audio src='https://sua_url/local/efeitos/alarme_liga1.mp3'/>
+      title: aviso
+      target: media_player.echo_dot_azul
+  mode: single
+  
+- id: '1715053726648'
+  alias: alarme_desligado
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - alarm_control_panel.home_alarm
+    to: disarmed
+  condition: []
+  action:
+  - service: notify.telegram
+    metadata: {}
+    data:
+      message: 'O alarme foi desligado! '
+  - service: notify.alexa_media
+    metadata: {}
+    data:
+      message: <audio src='https://sua_url/local/efeitos/alarme_desliga.mp3'/>
+      target: media_player.echo_dot_azul
+      data:
+        type: tts
+      title: aviso
+  - service: media_player.play_media
+    metadata: {}
+    data:
+      media_content_id: Stop
+      media_content_type: custom
+    target:
+      entity_id: media_player.echo_dot_azul
+  mode: single
+  
+- id: '1715053776533'
+  alias: alarme_armado_ausente
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - alarm_control_panel.home_alarm
+    to: armed_away
+  condition: []
+  action:
+  - service: notify.telegram
+    metadata: {}
+    data:
+      message: O alarme está armado no modo Ausente.
+  mode: single
+  
+- id: '1715054049657'
+  alias: dispara_alarme_casa
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.1001e46504_8
+    to: 'on'
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: alarm_control_panel.home_alarm
+      state: armed_home
+    - condition: state
+      entity_id: alarm_control_panel.home_alarm
+      state: armed_away
+  action:
+  - service: alarm_control_panel.alarm_trigger
+    metadata: {}
+    data: {}
+    target:
+      entity_id: alarm_control_panel.home_alarm
+  mode: single
+  
+- id: '1715054210522'
+  alias: alarme_disparado
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - alarm_control_panel.home_alarm
+    to: triggered
+  condition: []
+  action:
+  - service: notify.telegram
+    metadata: {}
+    data:
+      message: Alarme disparado. Confira sua casa.
+      data:
+        inline_keyboard:
+        - Desligar Alarme:/desligaralarme
+  - service: notify.alexa_media
+    metadata: {}
+    data:
+      message: <audio src='https://sua_url/local/efeitos/alarme.mp3'/>
+      target: media_player.echo_dot_azul
+      data:
+        type: tts
+  mode: single
+  
+- id: '1715055887812'
+  alias: desligar_alarme_telegram
+  description: ''
+  trigger:
+  - platform: event
+    event_type: telegram_callback
+    event_data:
+      command: /desligaralarme
+  - platform: event
+    event_type: telegram_command
+    event_data:
+      command: /desligaralarme
+  condition: []
+  action:
+  - service: alarm_control_panel.alarm_disarm
+    metadata: {}
+    data:
+      code: '1234'
+    target:
+      entity_id: alarm_control_panel.home_alarm
+  mode: single
+  
+- id: '1715056711456'
+  alias: armar_botao1
+  description: ''
+  trigger:
+  - platform: event
+    event_type: sonoff.remote
+  condition:
+  - condition: template
+    value_template: '{{trigger.event.data.command == 9 }}'
+  action:
+  - service: alarm_control_panel.alarm_arm_home
+    target:
+      entity_id: alarm_control_panel.home_alarm
+    data:
+      code: '1234'
+  mode: single
+  
+- id: '1715058140454'
+  alias: desarmar_botao
+  description: ''
+  trigger:
+  - platform: event
+    event_type: sonoff.remote
+  condition:
+  - condition: template
+    value_template: '{{trigger.event.data.command == 10 }}'
+  action:
+  - service: alarm_control_panel.alarm_disarm
+    target:
+      entity_id:
+      - alarm_control_panel.home_alarm
+    data:
+      code: '1234'
+  mode: single
