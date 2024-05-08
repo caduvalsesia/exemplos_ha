@@ -1,0 +1,11 @@
+alarm_control_panel:
+  - platform: manual
+    name: Home Alarm
+    code: "1234"
+    arming_time: 30         # tempo de armar o alarme antes de sair de casa, padrão 60 segundos
+    delay_time: 20          # tempo de desarmar o alarme ao voltar pra casa.
+    disarmed:
+      trigger_time: 0
+    armed_home:
+      arming_time: 0
+      delay_time: 0
