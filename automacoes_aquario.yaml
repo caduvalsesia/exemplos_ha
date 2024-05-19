@@ -1,0 +1,30 @@
+- alias: aquario_liga
+  initial_state: true
+  trigger:
+    platform: template
+    value_template: '{{ states.sensor.time.state == states.sensor.aquario_liga.state}}'
+  condition:
+    condition: state
+    entity_id: switch.luz_aquario
+    state: 'off'
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.luz_aquario
+  id: 6e17fe80c50641699a59c19c1af1b457
+  
+- alias: aquario_desliga
+  initial_state: true
+  trigger:
+    platform: template
+    value_template: '{{ states.sensor.time.state == states.sensor.aquario_desliga.state
+      }}'
+  condition:
+    condition: state
+    entity_id: switch.luz_aquario
+    state: 'on'
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.luz_aquario
+  id: 061424e9168b42a1823efd9e6dd6eb6d
