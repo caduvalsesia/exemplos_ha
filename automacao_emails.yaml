@@ -1,0 +1,60 @@
+####### AUTOMAÇÃO PARA QUANDO RECEBER OS EMAILS 
+- id: '1716688163396'
+  alias: recebe email
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.imap_valsesia_gmail_com
+  condition:
+  - condition: template
+    value_template: '{{ trigger.to_state.state | int > states(''input_number.quantidade_email_anterior'') | int }}'
+  action:
+  - service: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 100
+      rgb_color:
+      - 0
+      - 86
+      - 199
+    target:
+      entity_id: light.smart_color_night_light
+  - service: input_number.set_value
+    metadata: {}
+    data:
+      value: '{{ trigger.to_state.state | int }}'
+    target:
+      entity_id: input_number.quantidade_email_anterior
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 10
+      milliseconds: 0
+  - service: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.smart_color_night_light
+  mode: single
+
+
+########## AUTOMAÇÃO PARA QUANDO APAGAR OS EMAILS 
+- id: '1716688163398'
+  alias: email apagado
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.imap_valsesia_gmail_com
+  condition:
+  - condition: template
+    value_template: '{{ trigger.to_state.state | int < states(''input_number.quantidade_email_anterior'') | int }}'
+  action:
+  - service: input_number.set_value
+    metadata: {}
+    data:
+      value: '{{ trigger.to_state.state | int }}'
+    target:
+      entity_id: input_number.quantidade_email_anterior
+  mode: single
