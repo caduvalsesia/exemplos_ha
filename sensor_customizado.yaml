@@ -1,0 +1,4 @@
+sensor.med_energia_energia_total:
+  device_class: energy
+  state_class: total_increasing
+  unit_of_measurement: kWh
