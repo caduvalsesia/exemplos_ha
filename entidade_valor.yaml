@@ -1,0 +1,10 @@
+input_number:
+  tarifa_energia_consumida:
+    icon: mdi:currency-brl
+    name: Tarifa de Energia
+    initial: 0
+    min: 0
+    max: 100
+    step: 0.01
+    unit_of_measurement: 'R$/kWh'
+    mode: box
