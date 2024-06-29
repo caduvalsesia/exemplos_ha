@@ -1,0 +1,131 @@
+template: 
+  - sensor:
+    - unique_id: sidebar
+      state: template
+      attributes:
+        time: >
+          {% set hours = now().strftime('%H') %}
+          {% set minutes = now().strftime('%M') %}
+          <span class="time">
+            {{ hours }}<span class="time-colon">:</span>{{ minutes }}
+          </span>
+        date: >
+          <font color='#6a7377'><b>
+          {% if strptime(states('sensor.date'), '%Y-%m-%d').day != None %}
+          {% set days = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'] %}
+          {% set months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'] %}
+            {{ days[now().weekday()] }}<br>
+            {{ strptime(states('sensor.date'), '%Y-%m-%d').day }} {{ months[now().month-1] }}
+          {% endif %}
+          </b></font>
+        greet: >
+          <b>
+          {% set time = now().hour %}
+          {% if time <= 1 %} Boa madrugada {{'\U0001F611'}}
+          {% elif time <= 3 %} Boa madrugada {{'\U0001F62A'}}
+          {% elif time <= 5 %} Boa madrugada {{'\U0001F634'}}
+          {% elif time <= 7 %} Bom dia {{'\U0001F4A9'}}
+          {% elif time <= 9 %} Bom dia {{'\u2615\uFE0F'}}
+          {% elif time <= 10 %} Bom dia {{'\U0001F642'}}
+          {% elif time <= 13 %} Boa tarde {{'\U0001F60A'}}
+          {% elif time <= 15 %} Boa tarde {{'\U0001F60E'}}
+          {% elif time <= 17 %} Boa tarde {{'\U0001F44B\U0001F3FB'}}
+          {% elif time <= 19 %} Boa noite {{'\U0001F44B\U0001F3FB'}}
+          {% elif time <= 22 %} Boa noite {{'\U0001F60C'}}
+          {% elif time <= 23 %} Boa noite {{'\U0001F974'}}
+          {% else %} Boa noite {{'\U0001F974'}}
+          {% endif %}
+          </b>
+        active: >
+          <b>
+          {% set lights = [
+            states.light.d1_abajur,
+            states.light.abajurmeninas,
+            states.switch.luz_casal,
+            states.switch.sanca_casal,
+            states.switch.spot_casal,
+            states.switch.abajurcasal_paralelo,
+            states.switch.luz_bwc_social,
+            states.switch.luz_bwc_casal,
+            states.switch.spot_bwc_social,
+            states.switch.spot_bwc_casal,
+            states.switch.spot_banho,
+            states.switch.luz_corredor,
+            states.switch.spot_prateleira,
+            states.switch.luzmeninas,
+            states.switch.spot_mesa,
+            states.switch.spot_beliche,
+            states.switch.luz_escritorio,
+            states.switch.spot_escritorio,
+            states.switch.luzsala,
+            states.switch.spottv,
+            states.switch.ledtv,
+            states.switch.luzjantar,
+            states.switch.spot_cristaleira,
+            states.switch.luzbancada,
+            states.switch.pendente_cozinha,
+            states.switch.luz_cozinha,
+            states.switch.ledcozinha_paralelo,
+            states.switch.luz_lavanderia,
+            states.switch.luz_lavabo,
+            states.switch.luzsacada,
+            states.switch.spotsacada1,
+            states.switch.spotsacada,
+            states.switch.luzchurrasqueira,
+            states.switch.entrada
+          ] %}
+
+          {% set devices = [
+            states.media_player.lg_tv_casal,
+            states.climate.arescritorio,
+            states.climate.armeninas,
+            states.climate.ar_casal
+            
+          ] %}
+
+          {% set lights_on = lights | selectattr('state','eq','on') | list %}
+          {% set lights_name = lights | selectattr('state','eq','on') | map(attribute='name') | join(', ') %}
+
+          {% set devices_on = devices | selectattr('state','search','(on|cool|fan_only|playing)') | list %}
+          {% set devices_name = devices_on | map(attribute='name') | join(', ') %}
+
+          {% if (lights_on | length == 0) and (devices_on | length > 0) %}
+            {{ devices_name | regex_replace(',([^,]*)$',' e\\1') }} estão ligados
+
+          {% elif (lights_on | length == 1) and (devices_on | length == 1) %}
+            {{ lights_name }} e {{devices_name }} estão ligados
+
+          {% elif (lights_on | length == 1) and (devices_on | length > 1) %}
+            {{ lights_name }}, {{ devices_name | regex_replace(',([^,]*)$',' e\\1') }} está ligado
+
+          {% elif (lights_on | length > 1) and (devices_on | length == 1) %}
+            {{ lights_on | length }} luzes e {{ devices_name }} está ligado
+
+          {% elif (lights_on | length > 1) and (devices_on | length > 1) %}
+            {{ lights_on | length }} luzes, {{ devices_name | regex_replace(',([^,]*)$',' e\\1') }} está ligado
+
+          {% elif (lights_on | length == 1) and (devices_on | length == 0) %}
+            {{ lights_name }} está ligado
+
+          {% elif (lights_on | length > 1) and (devices_on | length == 0) %}
+            {{ lights_on | length }} luzes estão acesas
+
+          {% else %}
+            <font color='#6a7377'>Tudo está desligado</font>
+          {% endif %}
+          </b>
+        mailbox: >
+          {% set emails = states('sensor.imap_seu_email_com') %}
+          {% if emails | int(default=0) > 0 %}
+          {{ '\U0001F4E9' }} <font color='#3f5f6e'><b>{{ emails }} emails não lido(s)</b></font>
+          {% endif %}
+        weather: >
+          {% set entity = 'weather.forecast_casa'  %}
+          {% if not is_state(entity, 'unknown') %}
+            {% set temp = state_attr(entity, 'temperature') | round %}
+            {% set precip = states('sensor.casa_precipitacao') | round %}
+              Temperatura {{ temp }}°C com {{ 'nenhum risco de chuva' if precip == 0
+              else precip | string + 'mm de chuva \u2614\uFE0F' }}
+          {% else %}
+            Não consigo ler a previsão do tempo...
+          {% endif %}
