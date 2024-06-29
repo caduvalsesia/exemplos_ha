@@ -1,0 +1,202 @@
+- title: barra lateral
+  path: barra-lateral
+  type: custom:grid-layout
+  cards:
+    - type: custom:layout-card
+      layout_type: custom:grid-layout
+      layout:
+        margin: 0
+        grid-gap: var(--custom-layout-card-padding)
+        grid-template-columns: repeat(4, 1fr) 0
+        grid-template-rows: 0 repeat(2, fit-content(100%)) 0fr
+        grid-template-areas: |
+          "sidebar  .           .         .       ."  
+          "sidebar  estar       cozinha   bwc     ."  
+          "sidebar  teste       teste1    teste2  ."              
+        mediaquery:
+          '(max-width: 800px)':
+            grid-gap: calc(var(--custom-layout-card-padding) * 1.7)
+            grid-template-columns: 0 repeat(2, 1fr) 0
+            grid-template-rows: 0 repeat(5, fit-content(100%)) 0fr
+            grid-template-areas: |
+              ".  .           .        ."    
+              ".  sidebar     sidebar  ."                  
+              ".  estar       cozinha  ."      
+              ".  bwc         teste    ."  
+              ".  teste1      teste2   ."                                
+              ".  .           .        ."   
+          '(max-width: 1200px)':
+            grid-gap: var(--custom-layout-card-padding)
+            grid-template-columns: repeat(3, 1fr) 0
+            grid-template-rows: 0 repeat(3, fit-content(100%)) 0fr
+            grid-template-areas: |
+              "sidebar  .           .       ."   
+              "sidebar  estar       cozinha ."
+              "sidebar  bwc         teste   ."   
+              "sidebar  teste1      teste2  ."               
+              "sidebar  .           .       ."                  
+      cards:
+        - type: custom:button-card
+          view_layout:
+            grid-area: 1 / 2 / 2 / 5
+          name: SELECIONE O TEMA "tablet" NO PERFIL
+          tap_action:
+            action: navigate
+            navigation_path: /profile
+          styles:
+            card:
+              - display: |
+                  [[[
+                    return hass.themes.theme === 'tablet'
+                        ? 'none'
+                        : 'initial';
+                  ]]]
+            name:
+              - z-index: 1
+              - overflow: visible
+              - color: red
+              - font-weight: bolder
+              - font-size: xxx-large
+              - background: yellow
+        - type: vertical-stack
+          view_layout:
+            grid-area: sidebar
+          cards:
+            - type: custom:button-card
+              entity: sensor.template_sidebar
+              show_state: false
+              show_icon: false
+              tap_action:
+                action: none
+              name: |
+                [[[
+                  if (entity) {
+                      let attr = [];
+                      for (let [k, value] of Object.entries(entity.attributes))
+                          window.navigator.userAgent.match(/iPhone/i)
+                              ? k !== 'time' && k !== 'date' && value !== false && (attr += `<p>${k === 'greet' ? `<span class="iphone">${value}</span>` : `${value}`}</p>`)
+                              : value !== false && (attr += `<p>${value}</p>`);
+                      return attr;
+                  }
+                ]]]
+              extra_styles: |
+                #card {
+                  padding: 0;
+                  border-width: 0;
+                  font-family: SF Pro Display, Roboto, system-ui;
+                } #container {
+                  display: flex !important;
+                } #name {
+                  padding: 1vw 2.5vw 0 var(--custom-layout-card-padding);
+                  white-space: normal;
+                  text-align: left;
+                } .iphone {
+                  font-size: 1.5em;
+                  color: rgba(255, 255, 255, 0.8);
+                } .time {
+                  font-size: var(--sidebar-time-font-size);
+                  font-weight: 300;
+                  line-height: var(--sidebar-time-line-height);
+                  letter-spacing: 0.11vw;
+                  margin-left: -0.3vw;
+                  color: rgba(255, 255, 255, 0.8);
+                } @supports not (-moz-appearance:none) {
+                  .time-colon {
+                    position: relative;
+                    top: -.11em;
+                  }
+                } p {
+                  font-size: var(--sidebar-font-size);
+                  line-height: var(--sidebar-line-height);
+                  font-weight: 200;
+                  letter-spacing: 0.07vw;
+                  color: #6a7377;
+                } b {
+                  font-weight: 700;
+                } p > b {
+                  color: rgba(255, 255, 255, 0.8);
+                } /* portrait */ @media screen and (max-width: 1200px) {
+                  .time {
+                    font-size: calc(var(--sidebar-time-font-size) * 1.4 );
+                    line-height: calc(var(--sidebar-time-line-height) * 1.4 );
+                  }
+                  p {
+                    font-size: calc(var(--sidebar-font-size) * 1.4 );
+                    line-height: calc(var(--sidebar-line-height) * 1.4 );
+                  }
+                } /* phone */ @media screen and (max-width: 800px) {
+                  .time {
+                    font-size: calc(var(--sidebar-time-font-size) * 2.6 );
+                  }
+                  p {
+                    font-size: calc(var(--sidebar-font-size) * 2.6 );
+                    line-height: calc(var(--sidebar-line-height) * 2.6 );
+                    letter-spacing: 0.16vw;
+                  }
+                  #name {
+                    padding: 0 0 0 1vw;
+                  }
+                }
+        - square: true
+          type: grid
+          cards:
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: toggle
+              entity: switch.sonoff_1000b91f54
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: toggle
+              entity: switch.sonoff_10020352a4_1
+          title: Sala de Estar
+          columns: 2
+          view_layout:
+            grid-area: estar
+        - square: true
+          type: grid
+          cards:
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: toggle
+              entity: switch.casal_switch_2
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: toggle
+              entity: switch.casal_switch_3
+          title: Cozinha
+          columns: 2
+          view_layout:
+            grid-area: cozinha
+        - square: true
+          type: grid
+          cards:
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: toggle
+              entity: switch.bwcsocial_switch_1
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: toggle
+              entity: switch.bwcsocial_switch_2
+            - show_name: true
+              show_icon: true
+              type: button
+              tap_action:
+                action: toggle
+              entity: switch.bwcsocial_switch_3
+          columns: 2
+          title: BWC
+          view_layout:
+            grid-area: bwc
