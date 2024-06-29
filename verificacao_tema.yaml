@@ -1,0 +1,22 @@
+- type: custom:button-card
+  view_layout:
+    grid-area: 1 / 2 / 2 / 5
+  name: SET THEME TO "tablet" IN PROFILE 
+  tap_action:
+    action: navigate
+    navigation_path: /profile
+  styles:
+    card:
+      - display: >
+          [[[
+            return hass.themes.theme === 'tablet'
+                ? 'none'
+                : 'initial';
+          ]]]
+    name:
+      - z-index: 1    
+      - overflow: visible
+      - color: red
+      - font-weight: bolder
+      - font-size: xxx-large  
+      - background: yellow 
