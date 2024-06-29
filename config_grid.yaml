@@ -1,0 +1,30 @@
+margin: 0
+grid-gap: var(--custom-layout-card-padding)
+grid-template-columns: repeat(4, 1fr) 0
+grid-template-rows: 0 repeat(2, fit-content(100%)) 0fr
+grid-template-areas: |
+  "sidebar  .           .         .       ."  
+  "sidebar  estar       cozinha   bwc     ."  
+  "sidebar  teste       teste1    teste2  ."              
+mediaquery:
+  "(max-width: 800px)":
+    grid-gap: calc(var(--custom-layout-card-padding) * 1.7)
+    grid-template-columns: 0 repeat(2, 1fr) 0
+    grid-template-rows: 0 repeat(5, fit-content(100%)) 0fr
+    grid-template-areas: |
+      ".  .           .        ."    
+      ".  sidebar     sidebar  ."                  
+      ".  estar       cozinha  ."      
+      ".  bwc         teste    ."  
+      ".  teste1      teste2   ."                                
+      ".  .           .        ."   
+  "(max-width: 1200px)":
+    grid-gap: var(--custom-layout-card-padding)
+    grid-template-columns: repeat(3, 1fr) 0
+    grid-template-rows: 0 repeat(3, fit-content(100%)) 0fr
+    grid-template-areas: |
+      "sidebar  .           .       ."   
+      "sidebar  estar       cozinha ."
+      "sidebar  bwc         teste   ."   
+      "sidebar  teste1      teste2  ."               
+      "sidebar  .           .       ."             
