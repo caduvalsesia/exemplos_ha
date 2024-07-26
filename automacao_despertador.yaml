@@ -1,0 +1,50 @@
+- id: '1721709189899'
+  alias: configurar_Despertador
+  description: ''
+  trigger:
+  - platform: template
+    value_template: '{{ states.sensor.time.state == states.sensor.hora_despertar.state }}'
+  condition:
+  - condition: state
+    entity_id: input_boolean.liga_desliga_despertador
+    state: 'on'
+  action:
+  - service: media_player.volume_set
+    data_template:
+      entity_id: '{% if is_state("input_select.musica_despertador", "Echo Dot 5") %} media_player.echo_dot_azul    
+        {% elif is_state("input_select.musica_despertador", "Echo Spot") %} media_player.echo_spot_de_carlos   
+        {% elif is_state("input_select.musica_despertador”,”Echo Show 15") %} media_player.echo_show_cozinha   
+        {% endif %}'
+      volume_level: '{{  states.input_number.volume_despertador.state  }}'
+  - service: notify.alexa_media
+    data_template:
+      target: '{% if is_state("input_select.musica_despertador", "Echo Dot 5") %}media_player.echo_dot_azul
+        {% elif is_state("input_select.musica_despertador", "Echo Spot") %} media_player.echo_spot_de_carlos
+        {% elif is_state("input_select.musica_despertador", "Echo Show 15") %} media_player.echo_show_cozinha  {%
+        endif %}'
+      message: "{{ states.input_text.mensagem_despertador.state}}. São {{ states.input_number.hora_despertador.state
+        | int }} horas {% if states('input_number.minuto_despertador')|float > 0 %}\n
+        \ e {{ states.input_number.minuto_despertador.state | int }} minutos!\n{%-else
+        -%}\n  em ponto!\n{% endif %} \n{% if is_state('input_boolean.previsao_despertador','on')
+        %} \n Faz {{ state_attr('weather.forecast_casa','temperature') | int }} graus
+        lá fora.\n  Com uma umidade de {{state_attr('weather.forecast_casa','humidity')
+        | int}}%. {% endif %}"
+      data:
+        type: announce
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 15
+      milliseconds: 0
+  - service: media_player.play_media
+    data_template:
+      entity_id: '{% if is_state("input_select.musica_despertador", "Echo Dot 5")
+        %}media_player.echo_dot_azul  {% elif is_state("input_select.musica_despertador",
+        "Echo Spot") %} media_player.echo_spot_de_carlos {% elif is_state("input_select.musica_despertador",
+        "Echo Show 15") %} media_player.echo_show_cozinha  {% endif %}'
+      media_content_id: '{% if is_state("input_select.spotify_despertador", "Playlist
+        rock") %} playlist rock anos 90  {% elif is_state("input_select.spotify_despertador","Musicas
+        para Despertar") %} playlist cafe do cadu  {% elif is_state("input_select.spotify_despertador","Musicas
+        Clássicas") %} musicas classicas  {% endif %}'
+      media_content_type: SPOTIFY
+  mode: single
