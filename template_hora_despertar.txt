@@ -1,0 +1,6 @@
+{%- if states.sensor.hora_escolhida.state | length == 1 -%}0
+{%- endif -%}
+{{ states.sensor.hora_escolhida.state }}:
+{%- if states.sensor.minuto_escolhido.state | length == 1 -%}0
+{%- endif -%}
+{{ states.sensor.minuto_escolhido.state }}
