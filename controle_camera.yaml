@@ -1,0 +1,73 @@
+// código do botão para ESQUERDA
+
+show_name: true
+show_icon: true
+type: button
+tap_action:
+  action: call-service
+  service: onvif.ptz
+  service_data:
+    entity_id: camera.cam_pt2_mainstream
+    distance: 0.1
+    speed: 0.5
+    continuous_duration: 0.5
+    preset: "0"
+    move_mode: RelativeMove
+    pan: LEFT
+name: Esquerda
+
+///-------------------------------------------------------
+// código do botão para DIREITA
+
+show_name: true
+show_icon: true
+type: button
+tap_action:
+  action: call-service
+  service: onvif.ptz
+  service_data:
+    entity_id: camera.cam_pt2_mainstream
+    distance: 0.1
+    speed: 0.5
+    continuous_duration: 0.5
+    preset: "0"
+    move_mode: RelativeMove
+    pan: RIGHT
+name: Direita
+
+///-------------------------------------------------------
+// código do botão para CIMA
+
+show_name: true
+show_icon: true
+type: button
+tap_action:
+  action: call-service
+  service: onvif.ptz
+  service_data:
+    entity_id: camera.cam_pt2_mainstream
+    distance: 0.1
+    speed: 0.5
+    continuous_duration: 0.5
+    preset: "0"
+    move_mode: RelativeMove
+    tilt: UP
+
+///-------------------------------------------------------
+// código do botão para BAIXO
+
+show_name: true
+show_icon: true
+type: button
+tap_action:
+  action: call-service
+  service: onvif.ptz
+  service_data:
+    entity_id: camera.cam_pt2_mainstream
+    distance: 0.1
+    speed: 0.5
+    continuous_duration: 0.5
+    preset: "0"
+    move_mode: RelativeMove
+    tilt: DOWN
+name: Baixo
