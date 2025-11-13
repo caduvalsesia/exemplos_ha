@@ -1,0 +1,34 @@
+## Adicionar itens da lista do HA para lista de compras da Alexa
+alias: adiciona item lista alexa
+description: ""
+triggers:
+  - trigger: event
+    event_type: shopping_list_updated
+conditions:
+  - condition: template
+    value_template: "{{ trigger.event.data.action ==  \"add\" }}"
+actions:
+  - action: alexa_devices.send_text_command
+    metadata: {}
+    data:
+      device_id: [ID do seu dispositivo]
+      text_command: Adicione {{ trigger.event.data.item.name }} na minha lista de compras
+mode: single
+
+
+## Remover itens da lista do HA para lista de compras da Alexa
+alias: remove item lista alexa
+description: ""
+triggers:
+  - trigger: event
+    event_type: shopping_list_updated
+conditions:
+  - condition: template
+    value_template: "{{ trigger.event.data.action in [\"remove\", \"update\"] }}"
+actions:
+  - action: alexa_devices.send_text_command
+    metadata: {}
+    data:
+      device_id: [ID do seu dispositivo]
+      text_command: remover {{ trigger.event.data.item.name }} da minha lista de compras
+mode: single
