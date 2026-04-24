@@ -1,0 +1,14 @@
+          - type: custom:button-card
+            entity: switch.luminaria_maxspect
+            name: Luminária
+            template:
+              - base
+              - icon_energia
+              - circle  
+            variables:
+              circle_on: true
+              circle_input: >
+                    [[[
+                      return parseFloat(states['sensor.luminaria_power'].state).toFixed(1);
+                    ]]]
+              circle_input_unit: 'W' 
